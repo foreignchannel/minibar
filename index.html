@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartLift Bar — Умный Минибар</title>
+  <title>SmartBar — Умный Минибар</title>
   <style>
     :root {
       --bg: #0b0c10; --card: #151821; --accent: #3b82f6; --text: #e2e8f0; --sub: #94a3b8;
@@ -26,32 +26,31 @@
     }
     .btn-primary { background: var(--accent); color: #fff; }
     .btn-primary:active { transform: scale(0.98); }
-    .btn-outline { background: #232736; color: var(--text); border: 1px solid #33394d; }
 
     .detected-badge {
       display: inline-block; font-size: 12px; background: rgba(59, 130, 246, 0.15);
       color: var(--accent); padding: 4px 10px; border-radius: 20px; margin-bottom: 10px; font-weight: 600;
     }
 
-    .steps { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; font-size: 14px; color: var(--sub); }
+    .steps { display: flex; flex-direction: column; gap: 14px; margin-top: 14px; font-size: 14px; color: var(--sub); }
     .step-item { display: flex; gap: 12px; }
-    .step-num { width: 22px; height: 22px; border-radius: 50%; background: #232736; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+    .step-num { width: 24px; height: 24px; border-radius: 50%; background: #232736; color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
   </style>
 </head>
 <body>
   <div class="wrapper">
     <div class="hero">
       <div id="deviceBadge" class="detected-badge">Определение устройства...</div>
-      <h1>Стол-Минибар SmartLift</h1>
+      <h1>Стол-Минибар SmartBAR</h1>
       <p>Центр управления и первоначальной настройки</p>
     </div>
 
     <!-- Блок для Android -->
     <div class="card" id="androidCard">
       <h3>🤖 Android Устройство</h3>
-      <p style="font-size: 14px; color: var(--sub);">Скачайте приложение для мгновенного подключения по Bluetooth и управления без ввода IP-адресов.</p>
-      <!-- Ссылка на ваш APK на GitHub Releases -->
-      <a href="https://github.com/ВАШ_АККАУНТ/minibar/releases/latest/download/app-release.apk" class="btn btn-primary">
+      <p style="font-size: 14px; color: var(--sub);">Скачайте официальное приложение для настройки по Bluetooth и мгновенного управления без ввода IP-адресов.</p>
+      <!-- Прямая загрузка APK, лежащего в том же репозитории -->
+      <a href="smartBAR.apk" class="btn btn-primary" download>
         📥 Скачать приложение (.APK)
       </a>
     </div>
@@ -59,7 +58,7 @@
     <!-- Блок для iPhone / ПК -->
     <div class="card" id="appleCard">
       <h3>🍏 Apple iPhone / iPad / ПК</h3>
-      <p style="font-size: 14px; color: var(--sub);">Управляйте напрямую через браузер Safari без установки сторонних программ.</p>
+      <p style="font-size: 14px; color: var(--sub);">Управляйте через браузер Safari или откройте веб-панель на компьютере.</p>
       <a href="http://minibar.local" class="btn btn-primary">
         🚀 Открыть панель управления
       </a>
@@ -68,28 +67,30 @@
       </p>
     </div>
 
-    <!-- Инструкция первичной настройки -->
+    <!-- Актуальная инструкция -->
     <div class="card">
       <h3>Первое подключение стола</h3>
       <div class="steps">
         <div class="step-item">
           <div class="step-num">1</div>
-          <div>Включите питание минибара. Индикатор загорится красным.</div>
+          <div>Включите минибар в розетку.</div>
         </div>
         <div class="step-item">
           <div class="step-num">2</div>
-          <div>Откройте приложение или на iPhone скачайте официальный <b>ESP BLE Provisioning</b>.</div>
+          <div><b>Нажмите 5 раз подряд</b> на кнопку стола — активируется режим сопряжения на 10 минут.</div>
         </div>
         <div class="step-item">
           <div class="step-num">3</div>
-          <div>Выберите устройство <b>PROV_MINIBAR</b> и укажите ваш домашний Wi-Fi.</div>
+          <div>
+            <b>Если у вас Android:</b> запустите приложение SmartBAR, введите пароль от Wi-Fi и нажмите «Подключить».<br><br>
+            <b>Если у вас iPhone:</b> подключитесь к Wi-Fi сети <i>Minibar-Setup</i>, укажите домашнюю сеть в появившемся окне, затем откройте в Safari <i>minibar.local</i>.
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    // Автоопределение операционной системы
     const ua = navigator.userAgent || navigator.vendor || window.opera;
     const isAndroid = /android/i.test(ua);
     const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
@@ -100,10 +101,10 @@
 
     if (isAndroid) {
       badge.innerText = 'Обнаружен Android';
-      iCard.style.opacity = '0.5';
+      iCard.style.opacity = '0.4';
     } else if (isIOS) {
       badge.innerText = 'Обнаружен Apple iOS';
-      aCard.style.opacity = '0.5';
+      aCard.style.opacity = '0.4';
     } else {
       badge.innerText = 'ПК / Ноутбук';
     }
