@@ -2,95 +2,110 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#121214">
-  <title>Smart Lamp</title>
-
-  <!-- Подключение манифеста PWA -->
-  <link rel="manifest" href="manifest.json">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartLift Bar — Умный Минибар</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #121214; color: #fff; margin: 0; padding: 20px; text-align: center; }
-    .card { background: #1e1e24; border-radius: 24px; max-width: 380px; margin: auto; padding: 24px; box-shadow: 0 12px 40px rgba(0,0,0,0.6); }
-    h1 { font-size: 22px; margin-bottom: 8px; color: #60a5fa; }
-    #status { font-size: 13px; color: #ef4444; margin-bottom: 20px; font-weight: bold; }
-    .btn-connect { width: 100%; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 12px; border: none; background: #2563eb; color: white; cursor: pointer; margin-bottom: 20px; }
-    .btn-power { width: 100%; padding: 16px; font-size: 18px; font-weight: bold; border-radius: 14px; border: none; background: #10b981; color: white; cursor: pointer; margin-bottom: 25px; }
-    .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-    .btn-action { padding: 12px; border-radius: 10px; border: 1px solid #374151; background: #2a2a35; color: #e5e7eb; font-size: 15px; font-weight: 600; cursor: pointer; }
-    .grid-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .btn-mode { padding: 14px; border-radius: 12px; border: 1px solid #374151; background: #22222b; color: #93c5fd; font-weight: 600; cursor: pointer; }
-    .btn-mode:active, .btn-action:active { background: #3b82f6; color: white; }
+    :root {
+      --bg: #0b0c10; --card: #151821; --accent: #3b82f6; --text: #e2e8f0; --sub: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); display: flex; justify-content: center; padding: 24px 16px; }
+    .wrapper { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 20px; }
+    
+    .hero { text-align: center; padding: 20px 0; }
+    .hero h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; }
+    .hero p { color: var(--sub); font-size: 15px; }
+
+    .card { background: var(--card); border-radius: 20px; padding: 22px; border: 1px solid #232736; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .card h3 { font-size: 18px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    
+    .btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 16px; border-radius: 14px; text-decoration: none;
+      font-weight: 700; font-size: 16px; margin-top: 12px; transition: 0.2s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-outline { background: #232736; color: var(--text); border: 1px solid #33394d; }
+
+    .detected-badge {
+      display: inline-block; font-size: 12px; background: rgba(59, 130, 246, 0.15);
+      color: var(--accent); padding: 4px 10px; border-radius: 20px; margin-bottom: 10px; font-weight: 600;
+    }
+
+    .steps { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; font-size: 14px; color: var(--sub); }
+    .step-item { display: flex; gap: 12px; }
+    .step-num { width: 22px; height: 22px; border-radius: 50%; background: #232736; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
   </style>
 </head>
 <body>
-
-  <div class="card">
-    <h1>ESP32 Светильник</h1>
-    <div id="status">● Отключено</div>
-
-    <button class="btn-connect" onclick="connectBLE()">Подключить Bluetooth</button>
-    <button class="btn-power" onclick="send('p')">ВКЛ / ВЫКЛ</button>
-
-    <div class="controls">
-      <button class="btn-action" onclick="send('+')">Яркость +</button>
-      <button class="btn-action" onclick="send('-')">Яркость -</button>
-      <button class="btn-action" onclick="send('>')">Скорость +</button>
-      <button class="btn-action" onclick="send('<')">Скорость -</button>
+  <div class="wrapper">
+    <div class="hero">
+      <div id="deviceBadge" class="detected-badge">Определение устройства...</div>
+      <h1>Стол-Минибар SmartLift</h1>
+      <p>Центр управления и первоначальной настройки</p>
     </div>
 
-    <div class="grid-modes">
-      <button class="btn-mode" onclick="send('1')">1. Статика</button>
-      <button class="btn-mode" onclick="send('2')">2. Бег</button>
-      <button class="btn-mode" onclick="send('3')">3. Полиция</button>
-      <button class="btn-mode" onclick="send('4')">4. Огонь</button>
-      <button class="btn-mode" style="grid-column: span 2;" onclick="send('5')">5. Волна</button>
+    <!-- Блок для Android -->
+    <div class="card" id="androidCard">
+      <h3>🤖 Android Устройство</h3>
+      <p style="font-size: 14px; color: var(--sub);">Скачайте приложение для мгновенного подключения по Bluetooth и управления без ввода IP-адресов.</p>
+      <!-- Ссылка на ваш APK на GitHub Releases -->
+      <a href="https://github.com/ВАШ_АККАУНТ/minibar/releases/latest/download/app-release.apk" class="btn btn-primary">
+        📥 Скачать приложение (.APK)
+      </a>
+    </div>
+
+    <!-- Блок для iPhone / ПК -->
+    <div class="card" id="appleCard">
+      <h3>🍏 Apple iPhone / iPad / ПК</h3>
+      <p style="font-size: 14px; color: var(--sub);">Управляйте напрямую через браузер Safari без установки сторонних программ.</p>
+      <a href="http://minibar.local" class="btn btn-primary">
+        🚀 Открыть панель управления
+      </a>
+      <p style="font-size: 12px; color: var(--sub); margin-top: 10px; text-align: center;">
+        Совет: В Safari нажмите «Поделиться» ➔ «На экран Домой»
+      </p>
+    </div>
+
+    <!-- Инструкция первичной настройки -->
+    <div class="card">
+      <h3>Первое подключение стола</h3>
+      <div class="steps">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div>Включите питание минибара. Индикатор загорится красным.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div>Откройте приложение или на iPhone скачайте официальный <b>ESP BLE Provisioning</b>.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div>Выберите устройство <b>PROV_MINIBAR</b> и укажите ваш домашний Wi-Fi.</div>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
-    // Регистрация Service Worker для PWA установки
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
+    // Автоопределение операционной системы
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const isAndroid = /android/i.test(ua);
+    const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
 
-    const SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
-    const RX_CHAR_UUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
-    let rxCharacteristic = null;
+    const badge = document.getElementById('deviceBadge');
+    const aCard = document.getElementById('androidCard');
+    const iCard = document.getElementById('appleCard');
 
-    async function connectBLE() {
-      try {
-        document.getElementById('status').innerText = "Поиск устройства...";
-        const device = await navigator.bluetooth.requestDevice({
-          filters: [{ name: 'ESP32-Smart-Lamp' }],
-          optionalServices: [SERVICE_UUID]
-        });
-
-        document.getElementById('status').innerText = "Подключение...";
-        const server = await device.gatt.connect();
-        const service = await server.getPrimaryService(SERVICE_UUID);
-        rxCharacteristic = await service.getCharacteristic(RX_CHAR_UUID);
-
-        document.getElementById('status').innerText = "● Подключено к ESP32";
-        document.getElementById('status').style.color = "#10b981";
-
-        device.addEventListener('gattserverdisconnected', () => {
-          document.getElementById('status').innerText = "● Отключено";
-          document.getElementById('status').style.color = "#ef4444";
-        });
-      } catch (error) {
-        console.log(error);
-        document.getElementById('status').innerText = "Ошибка: " + error;
-      }
-    }
-
-    async function send(cmd) {
-      if (!rxCharacteristic) {
-        alert("Сначала нажми 'Подключить Bluetooth'!");
-        return;
-      }
-      const encoder = new TextEncoder();
-      await rxCharacteristic.writeValue(encoder.encode(cmd));
+    if (isAndroid) {
+      badge.innerText = 'Обнаружен Android';
+      iCard.style.opacity = '0.5';
+    } else if (isIOS) {
+      badge.innerText = 'Обнаружен Apple iOS';
+      aCard.style.opacity = '0.5';
+    } else {
+      badge.innerText = 'ПК / Ноутбук';
     }
   </script>
 </body>
