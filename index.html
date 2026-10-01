@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartLift Living — Премиальная умная мебель</title>
+  <title>SmartLift Living — Экосистема умных модулей</title>
   <style>
     :root {
       --bg: #0E0B08;
@@ -17,14 +17,20 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; }
     body {
       background: var(--bg);
-      background-image: radial-gradient(circle at 50% 12%, rgba(224, 122, 42, 0.22), transparent 55%);
-      color: var(--text); display: flex; justify-content: center; padding: 30px 16px; min-height: 100vh;
+      background-image: radial-gradient(circle at 50% 10%, rgba(224, 122, 42, 0.22), transparent 55%);
+      color: var(--text); display: flex; justify-content: center; padding: 32px 16px; min-height: 100vh;
     }
     .wrapper { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 18px; }
     
-    .hero { text-align: center; padding: 10px 0 6px; }
+    .hero { text-align: center; padding: 10px 0 8px; }
     .hero h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; }
     .hero p { color: var(--sub); font-size: 14px; }
+
+    .detected-badge {
+      display: inline-block; font-size: 11px; background: rgba(224, 122, 42, 0.15);
+      color: var(--accent); padding: 5px 12px; border-radius: 20px; margin-bottom: 12px; font-weight: 700;
+      border: 1px solid rgba(224, 122, 42, 0.3); text-transform: uppercase; letter-spacing: 0.5px;
+    }
 
     .card {
       background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
@@ -41,10 +47,12 @@
     .btn-primary { background: var(--accent-grad); color: #fff; box-shadow: 0 6px 20px rgba(224,122,42,0.35); }
     .btn-primary:active { transform: scale(0.97); }
 
-    .detected-badge {
-      display: inline-block; font-size: 11px; background: rgba(224, 122, 42, 0.15);
-      color: var(--accent); padding: 5px 12px; border-radius: 20px; margin-bottom: 12px; font-weight: 700;
-      border: 1px solid rgba(224, 122, 42, 0.3); text-transform: uppercase; letter-spacing: 0.5px;
+    .modules-preview {
+      display: flex; gap: 8px; margin-top: 10px; margin-bottom: 4px;
+    }
+    .module-tag {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+      padding: 6px 12px; border-radius: 20px; font-size: 12px; color: var(--sub);
     }
 
     .steps { display: flex; flex-direction: column; gap: 14px; margin-top: 14px; font-size: 14px; color: var(--sub); }
@@ -59,49 +67,60 @@
 <body>
   <div class="wrapper">
     <div class="hero">
-      <div id="deviceBadge" class="detected-badge">Определение...</div>
+      <div id="deviceBadge" class="detected-badge">Определение системы...</div>
       <h1>SmartLift Living</h1>
-      <p>Экосистема премиальной моторизованной мебели</p>
+      <p>Центр управления экосистемой умной мебели</p>
+    </div>
+
+    <!-- Модули экосистемы -->
+    <div class="card" style="padding: 18px 24px;">
+      <div style="font-size: 12px; color: var(--sub); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Поддерживаемые устройства:</div>
+      <div class="modules-preview">
+        <span class="module-tag" style="border-color: rgba(224,122,42,0.4); color: var(--accent);">🍸 Стол-Минибар</span>
+        <span class="module-tag">💡 Подсветка</span>
+        <span class="module-tag">🚪 Шкафы-Лифты</span>
+      </div>
     </div>
 
     <!-- Android блок -->
     <div class="card" id="androidCard">
       <h3>🤖 Android Hub</h3>
-      <p style="font-size: 13px; color: var(--sub); line-height: 1.5;">Официальное приложение экосистемы: автоматический поиск стола, настройка по Bluetooth и поддержка будущих модулей.</p>
-      <a href="smartlift.apk" class="btn btn-primary" download>
-        📥 Скачать приложение SmartLift (.APK)
+      <p style="font-size: 13px; color: var(--sub); line-height: 1.5;">Универсальное приложение для автоматического поиска устройств рядом, настройки по Bluetooth и переключения между модулями дома.</p>
+      <!-- Ссылка на готовый подписанный APK -->
+      <a href="app-release.apk" class="btn btn-primary" download>
+        📥 Скачать SmartLift Hub (.APK)
       </a>
     </div>
 
     <!-- Apple блок -->
     <div class="card" id="appleCard">
       <h3>🍏 Apple iOS / Safari</h3>
-      <p style="font-size: 13px; color: var(--sub); line-height: 1.5;">Мгновенный доступ к пульту столика в браузере Safari без установки сторонних программ.</p>
+      <p style="font-size: 13px; color: var(--sub); line-height: 1.5;">Прямой запуск пульта в Safari. Не требует установки сторонних программ из App Store.</p>
       <a href="http://minibar.local" class="btn btn-primary">
-        🚀 Открыть пульт управления
+        🚀 Открыть панель управления
       </a>
       <p style="font-size: 11px; color: var(--sub); margin-top: 10px; text-align: center;">
         Совет: В Safari нажмите «Поделиться» ➔ «На экран Домой»
       </p>
     </div>
 
-    <!-- Памятка первого пуска -->
+    <!-- Инструкция первого включения -->
     <div class="card">
-      <h3>Подключение мебели</h3>
+      <h3>Подключение нового устройства</h3>
       <div class="steps">
         <div class="step-item">
           <div class="step-num">1</div>
-          <div>Включите минибар. При первом старте радиомодули спят для экономии батареи.</div>
+          <div>Включите питание нужного модуля (стола, шкафа или подсветки).</div>
         </div>
         <div class="step-item">
           <div class="step-num">2</div>
-          <div><b>Нажмите 5 раз подряд</b> на кнопку столика, чтобы активировать окно настройки на 10 минут.</div>
+          <div><b>Нажмите 5 раз подряд</b> на кнопку устройства, чтобы активировать окно сопряжения на 10 минут.</div>
         </div>
         <div class="step-item">
           <div class="step-num">3</div>
           <div>
-            <b>На Android:</b> откройте скачанное приложение SmartLift и введите пароль.<br><br>
-            <b>На iPhone:</b> выберите Wi-Fi сеть <i>Minibar-Setup</i>, введите домашнюю сеть, затем откройте в Safari <i>minibar.local</i>.
+            <b>На Android:</b> откройте приложение SmartLift, выберите сеть Wi-Fi из списка и нажмите «Подключить».<br><br>
+            <b>На iPhone:</b> подключитесь к Wi-Fi сети устройства (например, <i>Minibar-Setup</i>), введите домашнюю сеть, затем откройте в Safari <i>minibar.local</i>.
           </div>
         </div>
       </div>
